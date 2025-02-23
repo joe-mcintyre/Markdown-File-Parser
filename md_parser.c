@@ -44,7 +44,6 @@ int main(int argc, char** argv) {
         printf("Failed to read file\n");
         return 1;
     }
-
     for (int i = 0; lines[i] != NULL; i++) {
         printf("%s", lines[i]); 
         free(lines[i]); 
@@ -53,7 +52,6 @@ int main(int argc, char** argv) {
     //PRINT DEBUGGING PRINT DEBUGGING
 
     //html_file = fopen(html_filename, "w");
-
     return 0;
 }
 
