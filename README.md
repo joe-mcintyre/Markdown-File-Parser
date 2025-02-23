@@ -22,7 +22,7 @@ Markdown File Compiler is a C-based tool that converts Markdown files into HTML 
 ## Usage
 1. Run the compiler:
    ```sh
-   ./markdown_compiler input.md
+   // not functional yet 
    ```
 2. Open a browser and visit:
    ```
@@ -34,7 +34,4 @@ Markdown File Compiler is a C-based tool that converts Markdown files into HTML 
 - Make
 - Basic C Libraries
 
-
-## Author
-[Your Name](https://github.com/your-username)
 

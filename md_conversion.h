@@ -2,6 +2,8 @@
 #define MD_CONVERSION_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 
 /* Takes FILE structure & places all file lines into an array
  */

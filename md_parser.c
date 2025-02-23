@@ -5,33 +5,73 @@
 #include <stdbool.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <unistd.h>
+#include "md_conversion.h"
 
 char* convert_to_html_exten(const char* md_filename);
+bool valid_arguments(int argc, char** argv);
 bool only_contains_periods(const char *str);
 
-
 int main(int argc, char** argv) {
-    if (argc != 2) {
-        fprintf(stderr, "Invalid argument count. Usage: %s <filename>\n", argv[0]);
-        return EXIT_FAILURE;
-    }
+
+    if (!valid_arguments(argc, argv)) return -1;
 
     char* filename = argv[1];
-    if (only_contains_periods(filename)) {
-        printf("Invalid filename");
+    char* html_filename = convert_to_html_exten(filename);
+    FILE* html_file;
+
+
+    //PRINT DEBUGGING PRINT DEBUGGING
+    printf("FILENAME: %s\n", filename);
+    printf("HTMLFILENAME: %s\n", html_filename);
+    //PRINT DEBUGGING PRINT DEBUGGING
+
+    FILE* md_file = fopen(filename, "r");
+    if (!md_file) {
+        perror("Error opening file");
         return -1;
     }
 
-    char* html_filename = convert_to_html_exten(filename);
-    FILE *html_file;
+    int md_file_line_count = count_file_lines(md_file);
+    printf("md line count %d\n", md_file_line_count);
 
-    html_file = fopen(html_filename, "w");
 
-    printf("\n\n FILENAME: %s", filename);
+    char **lines = convert_file_to_array(md_file);
+    fclose(md_file);
 
-    //html_output = fopen()
+    //PRINT DEBUGGING PRINT DEBUGGING
+    if (!lines) {
+        printf("Failed to read file\n");
+        return 1;
+    }
+
+    for (int i = 0; lines[i] != NULL; i++) {
+        printf("%s", lines[i]); 
+        free(lines[i]); 
+    }
+    free(lines);
+    //PRINT DEBUGGING PRINT DEBUGGING
+
+    //html_file = fopen(html_filename, "w");
 
     return 0;
+}
+
+bool valid_arguments(int argc, char** argv) {
+    if (argc != 2) {
+        fprintf(stderr, "Invalid argument count\n");
+        return false;
+    }
+    char* filename = argv[1];
+    if (only_contains_periods(filename)) {
+        fprintf(stderr, "Invalid filename\n");
+        return false;
+    }
+    if (access(filename, F_OK) != 0) {
+        fprintf(stderr, "File cannot be found\n");
+        return false;
+    }
+    return true;
 }
 
 bool only_contains_periods(const char *str) {
