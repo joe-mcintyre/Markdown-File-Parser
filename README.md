@@ -1,4 +1,4 @@
-## Markdown File Compiler
+# Markdown File Compiler
 
 Markdown File Compiler is a C-based tool that converts Markdown files into HTML and hosts them using a local web socket.
 
