@@ -34,11 +34,6 @@ Markdown File Compiler is a C-based tool that converts Markdown files into HTML 
 - Make
 - Basic C Libraries
 
-## Contributing
-Submit issues or pull requests.
-
-## License
-MIT License
 
 ## Author
 [Your Name](https://github.com/your-username)
