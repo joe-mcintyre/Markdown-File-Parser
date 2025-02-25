@@ -11,4 +11,12 @@
  */
 char** convert_to_html(char** md_array);
 
+/* Parses markdown line and returns
+ * it as a formatted html attribute
+ * for html line array
+ */
+char* parse_line(char* line);
+
+
+
 #endif

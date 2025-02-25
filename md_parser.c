@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include "md_conversion.h"
 
+
 char* convert_to_html_exten(const char* md_filename);
 bool valid_arguments(int argc, char** argv);
 bool only_contains_periods(const char *str);
