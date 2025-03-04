@@ -1,0 +1,45 @@
+# $text => heading1
+## $text => heading2
+### $text => heading3
+#### $text => heading4
+##### $text => heading5
+###### $text => heading6
+
+$text => heading1
+===== (same num of chars)
+
+$text => heading2
+----- (same num of chars)
+
+
+_$text_ => em               (emphasied)
+*$text* => em               (emphasied)
+
+**$text** => strong         (strong/bold)
+__$text__ => strong         (strong/bold)
+
+***$text*** => em_strong    (emphasied and strong)
+___$text___ => em_strong    (emphasied and strong)
+
+
+
+* $text => *_list
+- $text => -_list
+
+$NUMBER. => num_list (activate by starting with 1?, then checking if next line starts with num)
+
+`$text` => code
+``$text`` => code
+```$text``` => code
+
+> $text => blockquote (only end blockquote when next line doesnt start with >)
+>> $text => nested blockquote
+
+<$text>  => href_url
+![$text]($dir_path) => image
+[$text]($link) => href_custom_url (link on text)
+
+NULL/empty_line => break_line
+*** => horizontal_line              (horizontal line only 3 *'s)
+--- => horizontal_line              (horizontal line only 3 -'s)
+___ => horizontal_line              (horizontal line only underscores, any amount)

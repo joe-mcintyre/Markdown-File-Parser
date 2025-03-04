@@ -4,6 +4,7 @@
 
 #define BUFFER_SIZE 65536
 
+
 char** convert_file_to_array(FILE* file) {
     int file_line_count = count_file_lines(file);
     if (file_line_count <= 0) return NULL;
