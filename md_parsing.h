@@ -10,33 +10,46 @@
 struct parser {
    Queue* nested_attributes;
    bool active;
-   bool isHeading;
-   bool isUlList;
-   bool isNumList;
+   bool isH1;  //1st char
+   bool isH2;  //1st char
+   bool isH3;  //1st char
+   bool isH4;  //1st char
+   bool isH5;  //1st char
+   bool isH6;  //1st char
+   bool isUlList;   //1st char
+   bool isNumList;  //1st char
    bool isCode;
    bool isEm;
    bool isStrong;
    bool isEmStrong;
    bool isURL;
    bool isImage;
-   bool isBlockquote;
+   bool isBlockquote;  //1st char
 };
+
 typedef struct parser Semantic_Parser;
 
 /* Main function used to convert array of 
  * md lines to array of appropriately
  * corresponding html attributes
  */
-char** convert_to_html(char** md_array, int array_size);
+Semantic_Parser* init_parser();
 
-/* Parses markdown line and returns
- * it as a formatted html attribute
- * for html line array
- */
+void init_parser_bools(Semantic_Parser* new_parser);
+
+char** convert_to_html(char** md_array, int array_size);
 
 char* append_strings(const char *str1, const char *str2);
 
-char* parse_line(char* line);
+void parse_line(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char* prev_line, char** html_line);
+
+int valid_heading(Semantic_Parser* semantic_parser, char* trimmed_currentline, char** html_line);
+
+void close_heading(Semantic_Parser* semantic_parser, char** html_line, int type);
+
+void parse_line_semantics(Semantic_Parser* semantic_parser, char* currentline, char** html_line);
+
+char* get_heading_substring(char* heading_string, int type);
 
 bool underline_heading_check(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char* prev_line, char** html_line);
 

@@ -3,7 +3,7 @@
 #include "md_parsing.h"
 
 int main() {
-    char* md_arr[] = { "this should be a heading", "===", "egghead", "--"};
+    char* md_arr[] = { "this should be a heading", "===", "# heading", "## heading", "### heading3", "----", "egghead", "--"};
     int arr_size = sizeof(md_arr)/sizeof(md_arr[0]);
 
     printf("1st step\n");
