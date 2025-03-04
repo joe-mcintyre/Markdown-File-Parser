@@ -5,10 +5,10 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-#include "queue.h"
+#include "stack_queue.h"
 
 struct parser {
-   Queue* nested_attributes;
+   Stack_Queue* nested_attributes;
    bool active;
    bool isH1;  //1st char
    bool isH2;  //1st char

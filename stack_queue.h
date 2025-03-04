@@ -27,22 +27,26 @@ char* get_node_data(Node* node);
 
 void free_node(Node* node);
 
-struct queue {
+struct stack_queue {
     Node* head;
     Node* tail;
 };
-typedef struct queue Queue;
+typedef struct stack_queue Stack_Queue;
 
-Queue* init_queue();
+Stack_Queue* init_queue();
 
-void free_queue(Queue* queue);
+void free_queue(Stack_Queue* queue);
 
-void enqueue(Queue* queue, Node* new_node);
+void enqueue(Stack_Queue* queue, Node* new_node);
 
-void dequeue(Queue* queue);
+void dequeue(Stack_Queue* queue);
 
-Node* get_front(Queue* queue);
+void pop(Stack_Queue* queue);
 
-void print_queue(Queue* queue);
+Node* get_front(Stack_Queue* queue);
+
+Node* get_top(Stack_Queue* queue);
+
+void print_queue(Stack_Queue* queue);
 
 #endif

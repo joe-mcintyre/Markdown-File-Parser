@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "stack_queue.h"
 
 Node* init_node(char* new_data) {
     Node* new_node = (Node*)malloc(sizeof(Node));
@@ -27,8 +27,8 @@ char* get_node_data(Node* node) {
     return node->data;
 }
 
-Queue* init_queue() {
-    Queue* new_queue = (Queue*)malloc(sizeof(Queue));
+Stack_Queue* init_queue() {
+    Stack_Queue* new_queue = (Stack_Queue*)malloc(sizeof(Stack_Queue));
     Node* head = init_node(NULL);
     Node* tail = init_node(NULL);
     set_node_next(head, tail);
@@ -38,7 +38,7 @@ Queue* init_queue() {
     return new_queue;
 }
 
-void free_queue(Queue* queue) {
+void free_queue(Stack_Queue* queue) {
     if (queue == NULL) return;
     Node* current = queue->head->next;
     while(current != NULL && current != queue->tail) {
@@ -56,7 +56,7 @@ void free_queue(Queue* queue) {
     free(queue);
 }
 
-void enqueue(Queue* queue, Node* new_node) {
+void enqueue(Stack_Queue* queue, Node* new_node) {
     if (new_node ==  NULL) return;
     Node* prev_node = queue->tail->prev;
     set_node_next(prev_node, new_node);
@@ -65,7 +65,15 @@ void enqueue(Queue* queue, Node* new_node) {
     set_node_prev(queue->tail, new_node);
 }
 
-void dequeue(Queue* queue) {
+void pop(Stack_Queue* queue) {
+    Node* remove_node = queue->tail->prev;
+    if (remove_node == queue->head) return;
+    queue->tail->prev = remove_node->prev;
+    remove_node->prev->next = queue->tail;
+    free_node(remove_node);
+}
+
+void dequeue(Stack_Queue* queue) {
     Node* remove_node = queue->head->next;
     if (remove_node == queue->tail) return;
 
@@ -74,13 +82,19 @@ void dequeue(Queue* queue) {
     free_node(remove_node);
 }
 
-Node* get_front(Queue* queue) {
+Node* get_front(Stack_Queue* queue) {
     Node* head_node = queue->head;
     if (head_node->next == NULL || head_node->next == queue->tail) return NULL;
     return head_node->next;
 }
 
-void print_queue(Queue* queue) {
+Node* get_top(Stack_Queue* queue) {
+    Node* top_node = queue->tail;
+    if (top_node->prev == NULL || top_node->prev == queue->head) return NULL;
+    return top_node->prev;
+}
+
+void print_queue(Stack_Queue* queue) {
     Node* current = queue->head->next;
     int i=1;
     while (current != queue->tail) {

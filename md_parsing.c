@@ -1,5 +1,6 @@
 #include "md_parsing.h"
-#include "queue.h"
+#include "stack_queue.h"
+//#include <cstdlib>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -8,7 +9,7 @@
 
 Semantic_Parser* init_parser() {
     Semantic_Parser* new_parser = (Semantic_Parser*)malloc(sizeof(Semantic_Parser));
-    Queue* new_queue = init_queue();
+    Stack_Queue* new_queue = init_queue();
 
     new_parser->nested_attributes = new_queue;
     new_parser->active = false;
@@ -61,20 +62,17 @@ char** convert_to_html(char** md_array, int array_size) {
            char* next_line = get_next_line(md_array, i, array_size);
                                                                                printf("\t\tgot next line\n");//debug: parser created
            bool result = underline_heading_check(semantic_parser, line, next_line, prev_line, &html_line);
-           if (result) skip_line = true;
            printf("CURRENTLINE: %s\n", html_line);
-
-           parse_line(semantic_parser, line, next_line, prev_line, &html_line);
+           if (result) skip_line = true;
+           else {
+               parse_line(semantic_parser, line, next_line, prev_line, &html_line);
+           }
 
         }
-
-
-        if (semantic_parser->isH1) {  html_line = append_strings(html_line, "</h1>"); semantic_parser->isH1 = false; }
-        if (semantic_parser->isH2) { html_line = append_strings(html_line, "</h2>"); semantic_parser->isH2 = false; }
+        if (semantic_parser->isH1) { printf("ish1\n"); close_heading(semantic_parser, &html_line, 1); }
+        if (semantic_parser->isH2) { printf("ish2\n"); close_heading(semantic_parser, &html_line, 2); }
 
         html_array[i] = html_line;
-
-        // maybe do a convert line function here???, big switch case
     }
     //yada yada yada
                                                                                 printf("\treturned html_array\n");//debug: parser created
@@ -87,10 +85,11 @@ void parse_line(Semantic_Parser* semantic_parser, char* currentline, char* next_
 
     char* trimmed_currentline = trimwhitespace(strdup(currentline));
     char* trimmed_nextline = trimwhitespace(strdup(next_line));
+    int result;
                                                                                 printf("\tpost trimming\n");//debug: parser created
     switch (trimmed_currentline[0]) {
         case '#':
-            int result = valid_heading(semantic_parser, trimmed_currentline, html_line);
+            result = valid_heading(semantic_parser, trimmed_currentline, html_line);
             if (result == -1) {
                 parse_line_semantics(semantic_parser, trimmed_currentline, html_line);
             } else {
@@ -152,34 +151,95 @@ char* get_heading_substring(char* heading_string, int type) {
 }
 
 void close_heading(Semantic_Parser* semantic_parser, char** html_line, int type) {
+    Node* stack_top;
     switch (type) {
         case 1:
-            semantic_parser->isH1 = false;
-            *html_line = append_strings(*html_line, "</h1>");
+            stack_top = get_top(semantic_parser->nested_attributes);
+            if (stack_top == NULL) {
+                fprintf(stderr, "ERROR: semantic stack is empty, expected 'h1'\n");
+                exit(EXIT_FAILURE);
+            } else if (strcmp(stack_top->data, "h1") != 0) {
+                fprintf(stderr, "Incorrect semantic ordering, expected 'h1' recieved: %s\n", stack_top->data);
+                exit(EXIT_FAILURE);
+            } else {
+                semantic_parser->isH1 = false;
+                *html_line = append_strings(*html_line, "</h1>");
+                pop(semantic_parser->nested_attributes);
+            }
             break;
         case 2:
-            semantic_parser->isH2 = false;
-            *html_line = append_strings(*html_line, "</h2>");
+            stack_top = get_top(semantic_parser->nested_attributes);
+            if (stack_top == NULL) {
+                fprintf(stderr, "ERROR: semantic stack is empty, expected 'h2'\n");
+                exit(EXIT_FAILURE);
+            } else if (strcmp(stack_top->data, "h2") != 0) {
+                fprintf(stderr, "Incorrect semantic ordering, expected 'h2' recieved: %s\n", stack_top->data);
+                exit(EXIT_FAILURE);
+            } else {
+                semantic_parser->isH2 = false;
+                *html_line = append_strings(*html_line, "</h2>");
+                pop(semantic_parser->nested_attributes);
+            }
             break;
         case 3:
-            semantic_parser->isH3 = false;
-            *html_line = append_strings(*html_line, "</h3>");
+            stack_top = get_top(semantic_parser->nested_attributes);
+            if (stack_top == NULL) {
+                fprintf(stderr, "ERROR: semantic stack is empty, expected 'h3'\n");
+                exit(EXIT_FAILURE);
+            } else if (strcmp(stack_top->data, "h3") != 0) {
+                fprintf(stderr, "Incorrect semantic ordering, expected 'h3' recieved: %s\n", stack_top->data);
+                exit(EXIT_FAILURE);
+            } else {
+                semantic_parser->isH3 = false;
+                *html_line = append_strings(*html_line, "</h3>");
+                pop(semantic_parser->nested_attributes);
+            }
             break;
         case 4:
-            semantic_parser->isH4 = false;
-            *html_line = append_strings(*html_line, "</h4>");
+            stack_top = get_top(semantic_parser->nested_attributes);
+            if (stack_top == NULL) {
+                fprintf(stderr, "ERROR: semantic stack is empty, expected 'h4'\n");
+                exit(EXIT_FAILURE);
+            } else if (strcmp(stack_top->data, "h4") != 0) {
+                fprintf(stderr, "Incorrect semantic ordering, expected 'h4' recieved: %s\n", stack_top->data);
+                exit(EXIT_FAILURE);
+            } else {
+                semantic_parser->isH4 = false;
+                *html_line = append_strings(*html_line, "</h4>");
+                pop(semantic_parser->nested_attributes);
+            }
             break;
         case 5:
-            semantic_parser->isH5 = false;
-            *html_line = append_strings(*html_line, "</h5>");
+            stack_top = get_top(semantic_parser->nested_attributes);
+            if (stack_top == NULL) {
+                fprintf(stderr, "ERROR: semantic stack is empty, expected 'h5'\n");
+                exit(EXIT_FAILURE);
+            } else if (strcmp(stack_top->data, "h5") != 0) {
+                fprintf(stderr, "Incorrect semantic ordering, expected 'h5' recieved: %s\n", stack_top->data);
+                exit(EXIT_FAILURE);
+            } else {
+                semantic_parser->isH5 = false;
+                *html_line = append_strings(*html_line, "</h5>");
+                pop(semantic_parser->nested_attributes);
+            }
             break;
         case 6:
-            semantic_parser->isH6 = false;
-            *html_line = append_strings(*html_line, "</h6>");
+            stack_top = get_top(semantic_parser->nested_attributes);
+            if (stack_top == NULL) {
+                fprintf(stderr, "ERROR: semantic stack is empty, expected 'h6'\n");
+                exit(EXIT_FAILURE);
+            } else if (strcmp(stack_top->data, "h6") != 0) {
+                fprintf(stderr, "Incorrect semantic ordering, expected 'h6' recieved: %s\n", stack_top->data);
+                exit(EXIT_FAILURE);
+            } else {
+                semantic_parser->isH6 = false;
+                *html_line = append_strings(*html_line, "</h6>");
+                pop(semantic_parser->nested_attributes);
+            }
             break;
         default:
             perror("Invalid operation, should not have been reached");
-            abort();
+            exit(EXIT_FAILURE);
     }
 }
 
@@ -194,30 +254,36 @@ int valid_heading(Semantic_Parser* semantic_parser, char* trimmed_currentline, c
                 case 1:
                     semantic_parser->isH1 = true;
                     *html_line = append_strings(*html_line, "<h1>");
+                    enqueue(semantic_parser->nested_attributes, init_node("h1"));
                     return 1;
                 case 2:
                     semantic_parser->isH2 = true;
                     *html_line = append_strings(*html_line, "<h2>");
+                    enqueue(semantic_parser->nested_attributes, init_node("h2"));
                     return 2;
                 case 3:
                     semantic_parser->isH3 = true;
                     *html_line = append_strings(*html_line, "<h3>");
+                    enqueue(semantic_parser->nested_attributes, init_node("h3"));
                     return 3;
                 case 4:
                     semantic_parser->isH4 = true;
                     *html_line = append_strings(*html_line, "<h4>");
+                    enqueue(semantic_parser->nested_attributes, init_node("h4"));
                     return 4;
                 case 5:
                     semantic_parser->isH5 = true;
                     *html_line = append_strings(*html_line, "<h5>");
+                    enqueue(semantic_parser->nested_attributes, init_node("h5"));
                     return 5;
                 case 6:
                     semantic_parser->isH6 = true;
                     *html_line = append_strings(*html_line, "<h6>");
+                    enqueue(semantic_parser->nested_attributes, init_node("h6"));
                     break;
                 default:
                     perror("Invalid operation, should not have been reached");
-                    abort();
+                    exit(EXIT_FAILURE);
             }
         }
     }
@@ -251,7 +317,7 @@ bool underline_heading_check(Semantic_Parser* semantic_parser, char* currentline
                                                                                 printf("html_line : '%s'\n", *html_line);  //debug
         //*html_line = append_strings(*html_line, "</h1>");
                                                                                 printf("html_line : '%s'\n", *html_line);  //debug
-        dequeue(semantic_parser->nested_attributes);
+        //dequeue(semantic_parser->nested_attributes);
         return true;
     } else if (underline_heading(trimmed_currentline, trimmed_nextline, 2)) {
                                                                                 printf("\tIS HEADING 2\n");//debug: parser created
@@ -261,7 +327,7 @@ bool underline_heading_check(Semantic_Parser* semantic_parser, char* currentline
         *html_line = append_strings(*html_line, "<h2>");
         *html_line = append_strings(*html_line, currentline);
         //*html_line = append_strings(*html_line, "</h2>");
-        dequeue(semantic_parser->nested_attributes);
+        //dequeue(semantic_parser->nested_attributes);
         return true;
     }
     return false;

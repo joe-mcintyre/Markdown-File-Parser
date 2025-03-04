@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "queue.h"
+#include "stack_queue.h"
 
 #define TEST_SIZE 10000
 
 void stress_test_queue() {
-    Queue* queue = init_queue();
+    Stack_Queue* queue = init_queue();
     
     // Enqueue TEST_SIZE elements
     for (int i = 0; i < TEST_SIZE; i++) {
@@ -42,6 +42,26 @@ void stress_test_queue() {
     }
     
     free_queue(queue);
+
+    printf("---------------------------------------------------------\n");
+    printf("---------------------------------------------------------\n");
+    printf("---------------------------------------------------------\n");
+    queue = init_queue();
+    enqueue(queue, init_node("egg"));
+    enqueue(queue, init_node("fixed price"));
+    enqueue(queue, init_node("egg price"));
+    print_queue(queue);
+
+    Node* top_node = get_top(queue);
+    if (top_node != NULL) printf("top_node data: %s\n", top_node->data);
+    pop(queue);
+    print_queue(queue);
+
+    top_node = get_top(queue);
+    if (top_node || top_node != NULL) printf("top_node data: %s\n", top_node->data);
+    pop(queue);
+    print_queue(queue);
+
 }
 
 int main() {
