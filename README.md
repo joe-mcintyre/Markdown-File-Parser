@@ -3,10 +3,10 @@
 Markdown File Compiler is a C-based tool that converts Markdown files into HTML and hosts them using a local web socket.
 
 ## Features
-- Markdown to HTML conversion
-- Automatic styling
-- Local web hosting
-- Lightweight and fast
+* Markdown to HTML conversion
+* Automatic styling
+* Local web hosting
+* Lightweight and fast
 
 ## Installation
 1. Clone the repository:
