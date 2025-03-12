@@ -43,9 +43,7 @@ void init_parser_bools(Semantic_Parser* new_parser) {
 char** convert_to_html(char** md_array, int array_size) {
     //char* html_array[array_size];
     char** html_array = malloc(array_size * sizeof(char*));
-                                                                                printf("DEBUG: html_array created\n");//DEBUG: html_array created
     Semantic_Parser* semantic_parser = init_parser();
-                                                                                printf("DEBUG: parser created\n");//DEBUG: parser created
     bool skip_line = false;
     int i;
     for (i = 0; i < array_size; i++) {
@@ -58,15 +56,14 @@ char** convert_to_html(char** md_array, int array_size) {
            char* prev_line = get_prev_line(md_array, i, array_size);
            char* next_line = get_next_line(md_array, i, array_size);
            bool result = underline_heading_check(semantic_parser, line, next_line, prev_line, &html_line);
-           printf("RESULT IS %d\n", result);
            if (result) skip_line = true;
            else {
                 parse_line(semantic_parser, line, next_line, prev_line, &html_line);
                 //html_line = append_strings(html_line, "<br>");
            }
         }
-        if (semantic_parser->isH1) { printf("ish1\n"); close_heading(semantic_parser, &html_line, 1); }
-        if (semantic_parser->isH2) { printf("ish2\n"); close_heading(semantic_parser, &html_line, 2); }
+        if (semantic_parser->isH1) close_heading(semantic_parser, &html_line, 1);
+        if (semantic_parser->isH2) close_heading(semantic_parser, &html_line, 2);
 
         html_array[i] = html_line;
     }
@@ -80,13 +77,11 @@ void parse_line(Semantic_Parser* semantic_parser, char* currentline, char* next_
     char* trimmed_currentline;
     char* trimmed_nextline;
 
-    printf("currentline: %s\n", currentline);
     if (currentline == NULL) trimmed_currentline = "";
     else trimmed_currentline = trimwhitespace(strdup(currentline));
 
     if (next_line == NULL) trimmed_nextline = "";
     else trimmed_nextline = trimwhitespace(strdup(next_line));
-    printf("nextline: '%s'\n", trimmed_nextline);
 
     int result;
     switch (trimmed_currentline[0]) {
@@ -869,7 +864,6 @@ int parse_strong_em(Semantic_Parser* semantic_parser, char* currentline, char** 
         if (semantic_parser->isEmStrong == false) {
             char* rest_of_string = split_string(currentline, *i, chars_to_skip);
             if (closing_bracket_exists(rest_of_string, symbol, 3)) {
-                printf("the closing bracket for strongem exists\n");
                 semantic_parser->isEmStrong = true;
                 enqueue(semantic_parser->nested_attributes, init_node("em"));
                 *html_line = append_strings(*html_line, "<em>");
@@ -911,8 +905,6 @@ int parse_strong_em(Semantic_Parser* semantic_parser, char* currentline, char** 
 }
 
 bool closing_bracket_exists(char* string, char symbol, int amount) {
-    printf("\t rest of bracket string is: %s\n", string);
-    printf("\t amount is %d\n", amount);
     int stringlen = strlen(string);
     int i;
     for (i=0;i<stringlen;i++) {
@@ -920,9 +912,8 @@ bool closing_bracket_exists(char* string, char symbol, int amount) {
             if (amount == 1) return true;
             int x;
             for (x=1; x < amount; x++) {
-                printf("%c found at index%d at i=%d and x=%d\n", string[i+x], i+x, i, x);
                 //if (string[i+x] != '\0' && string[i+x] == symbol) {
-                if (string[i+x] == symbol && x == amount-1) { printf("YASSSSSSS IT WORKED\n"); return true;}
+                if (string[i+x] == symbol && x == amount-1) return true;
             }
         }
     }
@@ -944,6 +935,5 @@ char* split_string(char* string, int index, int skipped_chars) {
             output = append_strings(output, temp);
         }
     }
-                                                    printf("split string output is : '%s'\n", output);
     return output;
 }

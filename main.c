@@ -31,7 +31,6 @@ int main(int argc, char** argv) {
     }
 
     int md_file_line_count = count_file_lines(md_file);
-    printf("md line count %d\n", md_file_line_count);
 
 
     char **lines = convert_file_to_array(md_file);
@@ -46,6 +45,7 @@ int main(int argc, char** argv) {
         return 1;
     }
     // Write basic HTML structure
+    // Write basic HTML structure with enhanced inline CSS
     fprintf(file, "<!DOCTYPE html>\n<html>\n<head>\n<title>Markdown Output</title>\n");
     fprintf(file, "<style>\n"
                   "body { background-color: #343541; color: white; font-family: Arial, sans-serif; }\n"
@@ -71,23 +71,9 @@ int main(int argc, char** argv) {
     fclose(file);
 
 
+    printf("Markdown parsing successful. Html output now displaying on localhost:8080\n");
     int o = host_html(html_filename);
 
-    //PRINT DEBUGGING PRINT DEBUGGING
-    /*
-    if (!lines) {
-        printf("Failed to read file\n");
-        return 1;
-    }
-    for (int i = 0; lines[i] != NULL; i++) {
-        printf("%s", lines[i]); 
-        free(lines[i]); 
-    }
-    free(lines);
-    */
-    //PRINT DEBUGGING PRINT DEBUGGING
-
-    //html_file = fopen(html_filename, "w");
     return 0;
 }
 
