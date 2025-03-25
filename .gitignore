@@ -2,3 +2,8 @@ output.html
 requirements.txt
 exit
 exit*
+md_parser
+main.o
+md_conversion.o
+md_parsing.o
+stack_queue.o
