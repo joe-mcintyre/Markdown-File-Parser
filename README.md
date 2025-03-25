@@ -12,7 +12,7 @@ Markdown File Compiler is a C-based tool that converts Markdown files into HTML 
 1. Clone the repository:
    ```sh
    git clone https://github.com/joe-mcintyre/Markdown-File-Parser.git
-   cd markdown-file-Compiler
+   cd Markdown-File-Parser
    ```
 2. Compile the program:
    ```sh
