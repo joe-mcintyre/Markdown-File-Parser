@@ -16,8 +16,8 @@ Markdown File Compiler is a C-based tool that converts Markdown files into HTML 
    ```
 2. Compile the program:
    ```sh
-   make
    make clean
+   make
    ```
 
 ## Usage
