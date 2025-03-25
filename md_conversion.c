@@ -34,7 +34,7 @@ int count_file_lines(FILE *file) {
     for(;;) {
         size_t res = fread(buffer, 1, BUFFER_SIZE, file);
         if (ferror(file)) return -1;
-        int i;
+        size_t i;
         for (i = 0; i < res; i++) {
             if (buffer[i] == '\n') count++;
         }

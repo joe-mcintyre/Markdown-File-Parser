@@ -53,12 +53,11 @@ char** convert_to_html(char** md_array, int array_size) {
            skip_line = false;
         } else {
            char* line = md_array[i];
-           char* prev_line = get_prev_line(md_array, i, array_size);
            char* next_line = get_next_line(md_array, i, array_size);
-           bool result = underline_heading_check(semantic_parser, line, next_line, prev_line, &html_line);
+           bool result = underline_heading_check(semantic_parser, line, next_line, &html_line);
            if (result) skip_line = true;
            else {
-                parse_line(semantic_parser, line, next_line, prev_line, &html_line);
+                parse_line(semantic_parser, line, next_line, &html_line);
                 //html_line = append_strings(html_line, "<br>");
            }
         }
@@ -71,7 +70,7 @@ char** convert_to_html(char** md_array, int array_size) {
 }
 
 
-void parse_line(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char* prev_line, char** html_line) {
+void parse_line(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char** html_line) {
     if (currentline == NULL || currentline[0] == '\0') return;
     
     char* trimmed_currentline;
@@ -516,7 +515,7 @@ int valid_heading(Semantic_Parser* semantic_parser, char* trimmed_currentline, c
     return -1;
 }
 
-bool underline_heading_check(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char* prev_line, char** html_line) {
+bool underline_heading_check(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char** html_line) {
     if (!currentline) {
         return false;
     }
@@ -765,7 +764,7 @@ int parse_code_block(Semantic_Parser* semantic_parser, char* currentline, char**
     }
     if (chars_to_skip == 2) {
         if (semantic_parser->isCode == false) {
-            char* rest_of_string = split_string(currentline, *i, chars_to_skip);
+            //char* rest_of_string = split_string(currentline, *i, chars_to_skip);
             /* removing closing bracket check because code can exist across mulitple lines */
             //if (closing_bracket_exists(rest_of_string, '`', 3)) {
                 semantic_parser->isCode = true;

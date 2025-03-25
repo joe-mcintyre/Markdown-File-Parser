@@ -21,7 +21,6 @@ int main(int argc, char** argv) {
 
     char* filename = argv[1];
     char* html_filename = convert_to_html_exten(filename);
-    FILE* html_file;
 
 
     FILE* md_file = fopen(filename, "r");
@@ -73,6 +72,9 @@ int main(int argc, char** argv) {
 
     printf("Markdown parsing successful. Html output now displaying on localhost:8080\n");
     int o = host_html(html_filename);
+    if (o == 0) {
+        fprintf(stderr, "Markdown failed to host on localhost:8080\n");
+    }
 
     return 0;
 }

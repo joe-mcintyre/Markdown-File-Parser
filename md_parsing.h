@@ -41,7 +41,7 @@ char** convert_to_html(char** md_array, int array_size);
 
 char* append_strings(const char *str1, const char *str2);
 
-void parse_line(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char* prev_line, char** html_line);
+void parse_line(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char** html_line);
 
 int valid_heading(Semantic_Parser* semantic_parser, char* trimmed_currentline, char** html_line);
 
@@ -52,7 +52,7 @@ void parse_line_semantics(Semantic_Parser* semantic_parser, char* currentline, c
 char* get_heading_substring(char* heading_string, int type);
 
 
-bool underline_heading_check(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char* prev_line, char** html_line);
+bool underline_heading_check(Semantic_Parser* semantic_parser, char* currentline, char* next_line, char** html_line);
 
 bool underline_heading(char* line, char* next_line, int type);
 
